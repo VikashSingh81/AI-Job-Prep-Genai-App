@@ -5,6 +5,7 @@ const tokenBlacklistModel=require("../models/blacklist.model")
 
 
 async function registerUserController(req,res) {
+    console.log(req.body)
     const {username,email,password}=req.body
     if(!username || !email || !password){
         return res.status(400).json({
@@ -45,7 +46,9 @@ async function registerUserController(req,res) {
 
 async function loginUserController(req,res){
     const {email,password}=req.body
+    console.log("LOGIN INPUT:", email, password)
     const user=await userModel.findOne({email})
+    console.log("USER FOUND:", user)
     if(!user){
         return res.status(400).json({
             message:"Invalid email or password"
@@ -53,6 +56,7 @@ async function loginUserController(req,res){
     }
 
     const isPasswordValid=await bcrypt.compare(password,user.password)
+     console.log("PASSWORD MATCH:", isPasswordValid)
     if(!isPasswordValid){
         return res.status(400).json({
             message:"Invalid email or password"
